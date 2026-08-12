@@ -17,8 +17,10 @@
   </p>
 
   <p align="center">
+    <a href="#-the-problem-statement">Problem Statement</a> •
+    <a href="#-how-satyalens-solves-it">How It Solves It</a> •
     <a href="#-key-features">Key Features</a> •
-    <a href="#-system-architecture">Architecture</a> •
+    <a href="#-system-architecture--workflow">Architecture</a> •
     <a href="#-live-ui--verdict-preview">UI Preview</a> •
     <a href="#-quick-start">Quick Start</a> •
     <a href="#-trusted-domain-shield">Trusted Whitelist</a> •
@@ -29,14 +31,42 @@
 
 </div>
 
-## 💡 Why SatyaLens?
+## 🚨 The Problem Statement
 
-In an era dominated by deepfakes, sensationalized media, and rapid viral rumors, standard LLMs often **hallucinate** or reproduce biased reporting found across unverified commercial sites. 
+In today's digital ecosystem, **misinformation spreads 6x faster than truth**. Citizens, researchers, and journalists face severe challenges when verifying viral social media claims:
 
-**SatyaLens solves this with strict cryptographic-like source integrity:**
-- ⛔ **Zero Commercial Media Bias**: Commercial news networks and clickbait sites are completely filtered out.
-- 🏛️ **Government & IFCN Integrity**: Claims are checked **ONLY** against `.gov.in`, `.nic.in`, official international bodies (WHO, UN, CDC), and IFCN-certified independent fact-checkers (AltNews, BOOM Live, Reuters, Factly).
-- 🛡️ **Zero-Hallucination Policy**: Internal LLM parametric memory is bypassed. If no explicit evidence is retrieved from whitelisted sources, SatyaLens returns a strict **UNVERIFIED** verdict.
+1. **⚠️ Viral Rumors & Digital Panic**: Unverified WhatsApp forwards, manipulated media, and deepfakes trigger financial fraud, public panic, and political manipulation.
+2. **🤖 LLM Hallucinations & Memory Bias**: Traditional AI chat models rely on static parametric memory. When asked about recent events or complex news, standard LLMs **hallucinate fake citations, dates, or non-existent government schemes**.
+3. **📰 Commercial Media Bias & Clickbait**: General web search results are polluted by ad-driven commercial media, sensationalized headlines, and politically biased opinion pieces.
+4. **🔍 Opaque Verification**: Existing tools provide raw textual answers without citing verifiable primary government sources or accredited fact-checkers.
+
+---
+
+## 🛡️ How SatyaLens Solves It
+
+**SatyaLens introduces an unbiased, RAG-powered Fact-Checking Engine that enforces strict cryptographic-like source integrity:**
+
+```
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  ❌ THE OLD WAY (General AI & Commercial Web Search)                                    │
+  │  User Claim ➔ LLM Memory / Commercial Media Search ➔ Hallucinated Facts & Clickbait    │
+  └─────────────────────────────────────────────────────────────────────────────────────────┘
+                                             ▼
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  🟢 THE SATYALENS WAY (Whitelisted RAG + Fail-Safe Engine)                              │
+  │  User Claim ➔ Whitelisted Gov/IFCN Search ➔ Mistral RAG (Temp 0.0) ➔ 100% Verified Fact │
+  └─────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ⚔️ Problem vs. SatyaLens Solution Feature Matrix
+
+| ❌ The Problem | 🛡️ How SatyaLens Solves It | 🚀 Feature & Benefit |
+| :--- | :--- | :--- |
+| **AI Memory Hallucination** | Bypasses LLM parametric memory. Answers are generated **ONLY** using real-time retrieved search context. | **Zero-Hallucination Engine**: If evidence is absent, the model strictly refuses to guess. |
+| **Media Bias & Clickbait** | Enforces a hard-coded Domain Whitelist that blocks all commercial media, personal blogs, and clickbait. | **Whitelisted Source Shield**: Queries strictly `.gov.in`, `.nic.in`, WHO, UN, CDC, and IFCN members. |
+| **False Assertions** | Implements an automatic Fail-Safe returning `UNVERIFIED / INSUFFICIENT DATA` when evidence is ambiguous. | **Deterministic Fail-Safe**: Eliminates false positives and risky assumptions. |
+| **Unverifiable Output** | Returns structured JSON containing direct primary source URLs and original article titles. | **Primary Source Transparency**: Provides direct clickable links to official government releases. |
+| **Costly Search Infrastructure** | Uses DuckDuckGo search library wrapped in whitelisted domain search filters. | **Zero API Search Costs**: High-speed live web retrieval without expensive search API subscriptions. |
 
 ---
 
