@@ -53,22 +53,69 @@ In an era dominated by deepfakes, sensationalized media, and rapid viral rumors,
 
 ---
 
-## 🏗️ System Architecture
+## 🏗️ System Architecture & Workflow
+
+SatyaLens operates as a decoupled RAG (Retrieval-Augmented Generation) pipeline combining strict domain filtering, zero-shot web retrieval, and deterministic LLM verification.
+
+### 🏛️ System Architecture Component Diagram
 
 ```mermaid
-flowchart TD
-    A[👤 User Inputs Claim] --> B[🔍 SatyaLens Query Generator]
-    B --> C[🛡️ Whitelisted Domain Filter\n.gov.in | who.int | IFCN]
-    C --> D[🌐 DuckDuckGo Web Retrieval]
+graph TD
+    subgraph UI["🎨 User Interface Layer (Streamlit)"]
+        A["👤 User Claim Input"]
+        B["📊 Interactive Metrics & Source Cards"]
+        C["📥 Export JSON Result"]
+    end
+
+    subgraph RETRIEVAL["🛡️ Trusted Retrieval Layer"]
+        D["🔍 Query Builder"]
+        E["🌐 DuckDuckGo Search API"]
+        F["🔒 Whitelist Filter (.gov.in, who.int, IFCN)"]
+    end
+
+    subgraph ENGINE["🤖 RAG & LLM Engine (Mistral AI)"]
+        G["🧩 Evidence Context Assembler"]
+        H["🧠 Mistral LLM (Temperature: 0.0)"]
+        I["⚙️ JSON Validator & Fail-Safe Core"]
+    end
+
+    A --> D
+    D --> E
+    E --> F
+    F -->|"Verified Snippets"| G
+    F -->|"No Whitelisted Matches"| B
+    G --> H
+    H --> I
+    I -->|"Structured Fact JSON"| B
+    B --> C
+```
+
+### 🔄 End-to-End Verification Workflow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 👤 User / API Client
+    participant App as 💻 Streamlit UI (app.py)
+    participant Core as ⚙️ SatyaLens Core Engine
+    participant DDG as 🌐 DuckDuckGo Retriever
+    participant LLM as 🤖 Mistral AI API
+
+    User->>App: Submits claim statement
+    App->>Core: Calls verify_claim(claim_text)
+    Core->>DDG: Executes web search query
+    Note over DDG: Filters exclusively for .gov.in, who.int, & IFCN domains
+    DDG-->>Core: Returns whitelisted evidence snippets
     
-    D -->|Evidence Found| E[🧩 RAG Context Assembler]
-    D -->|No Evidence Found| H[🩶 Verdict: UNVERIFIED]
+    alt Evidence Found
+        Core->>LLM: Sends System Prompt + Evidence Context
+        LLM-->>Core: Returns JSON (Verdict, Score, Genuine Fact, Summary)
+        Core-->>App: Returns FactCheckResult dataclass
+    else No Whitelisted Evidence Found
+        Core-->>App: Triggers Fail-Safe (UNVERIFIED / INSUFFICIENT DATA)
+    end
     
-    E --> F[🤖 Mistral AI Fact Analysis Engine\nTemperature: 0.0]
-    F --> G{📊 JSON Parser & Fail-Safe Check}
-    
-    G -->|Valid Verdict| I[🟢 / 🔴 / 🟧 Structured UI & JSON Output]
-    G -->|Parse Error / Fallback| H
+    App-->>User: Renders Color-Coded Verdict & Verified Source Cards
 ```
 
 ---
