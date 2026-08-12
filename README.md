@@ -1,206 +1,295 @@
- # 🔍 SatyaLens - The Truth Lens for Misinformation
+<div align="center">
 
-An end-to-end, unbiased Fact-Checker LLM application focused on Indian and International fact verification. SatyaLens verifies user claims using **ONLY** trusted government portals and IFCN-certified (International Fact-Checking Network) sources, strictly filtering out partisan or politically aligned media channels.
+  <img src="satyalens_logo.png" alt="SatyaLens Logo" width="150" style="border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" />
 
-## 🌟 Features
+  # 🔍 SatyaLens
+  ### *The Unbiased Truth Lens for Misinformation Detection*
 
-- **Domain Whitelisting**: Restricts searches to trusted government and IFCN-certified sources only
-- **RAG-Powered**: Uses Retrieval-Augmented Generation with web search retrieval
-- **LLM Support**: Powered by Mistral AI (supports mistral-small-latest, mistral-large-latest, etc.)
-- **Structured Output**: Returns JSON-formatted results with verdict, confidence score, and verified sources
-- **Beautiful UI**: Clean Streamlit interface with color-coded verdicts
-- **Fail-Safe Design**: Returns "UNVERIFIED" when no trusted evidence is found
+  [![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+  [![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io)
+  [![Mistral AI](https://img.shields.io/badge/Mistral_AI-Powered-FF7000?style=for-the-badge&logo=mistralai&logoColor=white)](https://mistral.ai)
+  [![RAG Engine](https://img.shields.io/badge/RAG_Engine-Zero--Hallucination-00C853?style=for-the-badge&logo=google-scholar&logoColor=white)]()
+  [![Verification](https://img.shields.io/badge/Domain_Whitelist-IFCN_%26_Gov-007BFF?style=for-the-badge&logo=shield&logoColor=white)]()
+  [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=for-the-badge)](LICENSE)
 
-## 📋 Trusted Sources
+  <p align="center">
+    <b>SatyaLens</b> is an end-to-end, zero-hallucination fact-checking application that verifies viral claims, social media rumors, and news statements strictly against <b>official Government portals</b> and <b>IFCN-certified fact-checking networks</b>.
+  </p>
 
-SatyaLens **ONLY** verifies claims from:
+  <p align="center">
+    <a href="#-key-features">Key Features</a> •
+    <a href="#-system-architecture">Architecture</a> •
+    <a href="#-live-ui--verdict-preview">UI Preview</a> •
+    <a href="#-quick-start">Quick Start</a> •
+    <a href="#-trusted-domain-shield">Trusted Whitelist</a> •
+    <a href="#-python-sdk-usage">Python SDK</a>
+  </p>
 
-### Indian Government Domains
-- `pib.gov.in` - Press Information Bureau
-- `factcheck.pib.gov.in` - PIB Fact Check
-- `india.gov.in` - India Portal
-- `rbi.org.in` - Reserve Bank of India
-- `.gov.in` - All Indian government domains
-- `.nic.in` - National Informatics Centre
+---
 
-### International Government/Global Bodies
-- `who.int` - World Health Organization
-- `un.org` - United Nations
-- `cdc.gov` - Centers for Disease Control
+</div>
 
-### IFCN Certified Fact-Checkers
-- `factly.in` - Factly
-- `boomlive.in` - BOOM Live
-- `altnews.in` - Alt News
-- `newschecker.in` - NewsChecker
-- `reuters.com` - Reuters Fact Check
-- `apnews.com` - AP Fact Check
+## 💡 Why SatyaLens?
 
-## 🚀 Installation
+In an era dominated by deepfakes, sensationalized media, and rapid viral rumors, standard LLMs often **hallucinate** or reproduce biased reporting found across unverified commercial sites. 
+
+**SatyaLens solves this with strict cryptographic-like source integrity:**
+- ⛔ **Zero Commercial Media Bias**: Commercial news networks and clickbait sites are completely filtered out.
+- 🏛️ **Government & IFCN Integrity**: Claims are checked **ONLY** against `.gov.in`, `.nic.in`, official international bodies (WHO, UN, CDC), and IFCN-certified independent fact-checkers (AltNews, BOOM Live, Reuters, Factly).
+- 🛡️ **Zero-Hallucination Policy**: Internal LLM parametric memory is bypassed. If no explicit evidence is retrieved from whitelisted sources, SatyaLens returns a strict **UNVERIFIED** verdict.
+
+---
+
+## ✨ Key Features
+
+| Feature | Description | Benefit |
+| :--- | :--- | :--- |
+| **🛡️ Whitelisted Retrieval** | Restricts DuckDuckGo searches exclusively to verified government & IFCN domains. | Eliminates media bias & opinion pieces |
+| **⚡ RAG Architecture** | Retrieval-Augmented Generation feeds raw evidence snippets directly into Mistral AI. | Factual accuracy grounded in empirical evidence |
+| **🤖 Mistral LLM Core** | Leverages `mistral-small-latest` or `mistral-large-latest` with strict temperature (`0.0`). | Deterministic, highly consistent reasoning |
+| **🎨 Dark Theme UI** | Sleek Streamlit interface inspired by Perplexity AI & Claude with metallic glassmorphism. | Modern, immersive, and responsive UX |
+| **🔒 Fail-Safe Engine** | Automatically falls back to `UNVERIFIED / INSUFFICIENT DATA` when evidence is missing. | Prevents false positives or guesswork |
+| **📦 JSON & SDK Ready** | Returns structured JSON outputs for easy integration into web apps, bots, or pipelines. | Plug-and-play developer experience |
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TD
+    A[👤 User Inputs Claim] --> B[🔍 SatyaLens Query Generator]
+    B --> C[🛡️ Whitelisted Domain Filter\n.gov.in | who.int | IFCN]
+    C --> D[🌐 DuckDuckGo Web Retrieval]
+    
+    D -->|Evidence Found| E[🧩 RAG Context Assembler]
+    D -->|No Evidence Found| H[🩶 Verdict: UNVERIFIED]
+    
+    E --> F[🤖 Mistral AI Fact Analysis Engine\nTemperature: 0.0]
+    F --> G{📊 JSON Parser & Fail-Safe Check}
+    
+    G -->|Valid Verdict| I[🟢 / 🔴 / 🟧 Structured UI & JSON Output]
+    G -->|Parse Error / Fallback| H
+```
+
+---
+
+## 🎨 Live UI & Verdict Preview
+
+SatyaLens formats claims into intuitive, color-coded verdict badges paired with detailed analytical breakdowns and clickable primary source links.
+
+### 🚦 Verdict Spectrum
+
+```
+  🟢  GENUINE / TRUE             The claim is fully validated by official government releases or IFCN reports.
+  🔴  FAKE / FALSE               The claim has been explicitly debunked by official sources.
+  🟧  MISLEADING                 The claim contains selective truth mixed with distorted context.
+  🩶  UNVERIFIED DATA            No evidence found in trusted whitelisted domains (Fail-safe trigger).
+```
+
+### 💻 UI Output Breakdown
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│  🟢 VERDICT: GENUINE / TRUE                           CONFIDENCE SCORE: 96%             │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│  📌 GENUINE FACT STATEMENT                                                             │
+│  "The Reserve Bank of India has officially announced new guidelines regarding..."      │
+│                                                                                        │
+│  📝 FACT CHECK SUMMARY                                                                 │
+│  Based on official press releases from pib.gov.in and rbi.org.in, the policy was       │
+│  ratified on August 10, 2026. Commercial media claims of immediate bans are false.      │
+│                                                                                        │
+│  🔗 VERIFIED SOURCES                                                                   │
+│  • Press Information Bureau [pib.gov.in]                                               │
+│  • Reserve Bank of India Official Portal [rbi.org.in]                                  │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛡️ Trusted Domain Shield
+
+SatyaLens enforces strict domain whitelisting across 3 primary pillars:
+
+<details open>
+<summary><b>🇮🇳 Indian Government & Regulatory Portals</b></summary>
+
+- `pib.gov.in` (Press Information Bureau)
+- `factcheck.pib.gov.in` (PIB Fact Check Unit)
+- `india.gov.in` (National Portal of India)
+- `rbi.org.in` (Reserve Bank of India)
+- `sebi.gov.in` (SEBI)
+- `isro.gov.in` (ISRO)
+- `icmr.gov.in` (ICMR)
+- `mohfw.gov.in` (Ministry of Health)
+- All `.gov.in`, `.nic.in`, and `.edu.in` TLDs
+</details>
+
+<details open>
+<summary><b>🌐 International Government & Global Bodies</b></summary>
+
+- `who.int` (World Health Organization)
+- `un.org` (United Nations)
+- `cdc.gov` (Centers for Disease Control and Prevention)
+- `nih.gov` (National Institutes of Health)
+- `ec.europa.eu` (European Commission)
+- `worldbank.org` & `imf.org`
+</details>
+
+<details open>
+<summary><b>🛡️ IFCN Certified Fact-Checkers</b></summary>
+
+- `factly.in` (Factly India)
+- `boomlive.in` (BOOM Live)
+- `altnews.in` (Alt News)
+- `newschecker.in` (NewsChecker)
+- `reuters.com` (Reuters Fact Check)
+- `apnews.com` (AP Fact Check)
+- `snopes.com`, `factcheck.org`, `fullfact.org`, `politifact.com`
+</details>
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8 or higher
-- pip package manager
+- **Python 3.8+** installed on your system.
+- A free **Mistral AI API Key** ([Get your key here](https://console.mistral.ai/api-keys/)).
 
-### Step 1: Clone or Download the Project
+### 1️⃣ Clone & Navigate
+
 ```bash
+git clone https://github.com/Narendra6305/SatyaLens.git
 cd SatyaLens
 ```
 
-### Step 2: Install Dependencies
+### 2️⃣ Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 3: Set Up Environment Variables
-1. Copy the example environment file:
+### 3️⃣ Configure Environment
+
+Create a `.env` file in the root directory (or copy `.env.example`):
+
 ```bash
 cp .env.example .env
 ```
 
-2. Edit `.env` and add your Mistral AI API key:
-```bash
+Add your API key into `.env`:
+
+```env
 # Required: Mistral AI API Key
 MISTRAL_API_KEY=your_mistral_api_key_here
 
-# Optional: Choose your LLM model
+# Optional: LLM Selection (default: mistral-small-latest)
 LLM_MODEL=mistral-small-latest
 ```
 
-### Getting API Keys
+### 4️⃣ Launch Web Application
 
-#### Mistral AI API Key (Required)
-1. Visit [https://console.mistral.ai/api-keys/](https://console.mistral.ai/api-keys/)
-2. Sign up or log in
-3. Create a new API key
-
-**Note:** SatyaLens uses DuckDuckGo Search for web retrieval, which is free and requires no API key. Only the Mistral AI API key is required.
-
-## 🎯 Usage
-
-### Running the Application
-
-Start the Streamlit application:
 ```bash
 streamlit run app.py
 ```
 
-The application will open in your browser at `http://localhost:8501`
-
-### Using SatyaLens
-
-1. **Enter a Claim**: Type or paste the claim you want to verify in the text area
-2. **Click "Verify Claim"**: SatyaLens will search trusted sources and analyze the claim
-3. **View Results**: 
-   - **Verdict**: Color-coded result (Green=True, Red=False, Orange=Misleading, Gray=Unverified)
-   - **Confidence Score**: Percentage indicating confidence in the verdict
-   - **Genuine Fact**: The actual truth if the claim is false/misleading
-   - **Summary**: 2-3 sentence explanation of the verdict
-   - **Verified Sources**: Links to trusted sources used for verification
-
-### Programmatic Usage
-
-You can also use SatyaLens as a Python module:
-
-```python
-from satya_lens_core import verify_claim
-
-# Verify a claim
-result = verify_claim("The Indian government announced free laptops for all students")
-
-# Access results
-print(f"Verdict: {result.verdict}")
-print(f"Confidence: {result.confidence_score}")
-print(f"Summary: {result.summary}")
-print(f"Sources: {result.verified_sources}")
-```
-
-## 📊 Output Format
-
-SatyaLens returns structured JSON output:
-
-```json
-{
-    "verdict": "GENUINE / TRUE",
-    "confidence_score": 0.95,
-    "genuine_fact": "The government has indeed announced...",
-    "summary": "Based on official PIB releases...",
-    "verified_sources": [
-        {
-            "title": "Press Information Bureau - Official Release",
-            "url": "https://pib.gov.in/..."
-        }
-    ]
-}
-```
-
-### Verdict Options
-- **GENUINE / TRUE**: The claim is accurate based on trusted sources
-- **FAKE / FALSE**: The claim is false based on trusted sources
-- **MISLEADING**: The claim contains partial truths but is misleading
-- **UNVERIFIED / INSUFFICIENT DATA**: No evidence found from trusted sources
-
-## 🔧 Configuration
-
-### Modifying Trusted Domains
-Edit `config.py` to add or remove trusted domains:
-
-```python
-TRUSTED_DOMAINS: List[str] = [
-    "pib.gov.in",
-    "factcheck.pib.gov.in",
-    # Add more domains here
-]
-```
-
-### LLM Models
-Configure `LLM_MODEL` in `.env`:
-- `mistral-small-latest` (Default, fast & accurate)
-- `mistral-large-latest` (Highest capability)
-- `open-mistral-7b` (Lightweight model)
-
-### Adjusting Search Parameters
-Edit `config.py` to modify:
-- `MAX_SEARCH_RESULTS`: Number of search results (default: 5)
-- `MAX_SNIPPET_LENGTH`: Length of content snippets (default: 500)
-- `LLM_TEMPERATURE`: LLM temperature (default: 0.0 for consistency)
-
-## 🏗️ Project Structure
-
-```
-SatyaLens/
-├── config.py                 # Configuration and domain whitelist
-├── satya_lens_core.py        # Core retrieval and LLM logic
-├── app.py                    # Streamlit UI application
-├── requirements.txt          # Python dependencies
-├── .env.example             # Environment variable template
-└── README.md                # This file
-```
-
-## ⚠️ Important Notes
-
-- **No Internal Knowledge**: SatyaLens does NOT use pre-trained internal memory. It only uses retrieved evidence from trusted sources.
-- **Fail-Safe**: If no trusted sources are found, the verdict defaults to "UNVERIFIED / INSUFFICIENT DATA".
-- **Domain Restriction**: The system explicitly ignores general commercial media to avoid political bias.
-- **API Costs**: Using OpenAI or Google APIs may incur costs. Tavily offers a free tier.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please ensure:
-- Any new domains added are government or IFCN-certified
-- Code follows the existing style
-- Changes maintain the fail-safe design
-
-## 📄 License
-
-This project is provided as-is for educational and informational purposes.
-
-## 🙏 Acknowledgments
-
-- DuckDuckGo for the search 
-- Mistral AI for LLM capabilities
-- IFCN for certifying trusted fact-checkers
+🎉 Open your browser at `http://localhost:8501` to start fact-checking!
 
 ---
 
-Built with ❤️ for Truth | SatyaLens v1.0.0
+## 🐍 Python SDK Usage
+
+You can seamlessly import and use **SatyaLens** inside your own Python projects or automation pipelines:
+
+```python
+from satya_lens_core import verify_claim, SatyaLens
+
+# Method 1: High-level helper function
+result = verify_claim("PIB announced new digital education initiative for rural schools")
+
+# Print structured findings
+print(f"Verdict     : {result.verdict}")
+print(f"Confidence  : {result.confidence_score * 100}%")
+print(f"Fact        : {result.genuine_fact}")
+print(f"Summary     : {result.summary}")
+print(f"Sources     : {len(result.verified_sources)} verified link(s) found")
+
+# Method 2: Object-Oriented Instance
+engine = SatyaLens()
+fact_check = engine.verify("RBI releases circular on UPI credit line limits")
+```
+
+### 📊 JSON Output Schema
+
+```json
+{
+  "verdict": "GENUINE / TRUE",
+  "confidence_score": 0.95,
+  "genuine_fact": "The Press Information Bureau confirmed the initiative on official channels.",
+  "summary": "Official press release published on pib.gov.in validates the claim.",
+  "verified_sources": [
+    {
+      "title": "Press Information Bureau - Official Release",
+      "url": "https://pib.gov.in/PressReleasePage.aspx?PRID=123456"
+    }
+  ]
+}
+```
+
+---
+
+## ⚙️ Configuration Matrix
+
+Customize SatyaLens settings in `config.py` or `.env`:
+
+| Parameter | Default Value | Location | Description |
+| :--- | :--- | :--- | :--- |
+| `MISTRAL_API_KEY` | `""` | `.env` | Required Mistral API key |
+| `LLM_MODEL` | `mistral-small-latest` | `.env` | Model choice (`mistral-small-latest`, `mistral-large-latest`) |
+| `LLM_TEMPERATURE` | `0.0` | `config.py` | Strict temperature setting for deterministic output |
+| `MAX_SEARCH_RESULTS` | `5` | `config.py` | Number of whitelisted search snippets fetched per claim |
+| `MAX_SNIPPET_LENGTH` | `500` | `config.py` | Maximum character length per web snippet |
+
+---
+
+## 📂 Repository Layout
+
+```
+SatyaLens/
+├── 📄 app.py                 # Perplexity-inspired Streamlit Dark UI
+├── ⚙️ config.py              # Whitelisted domain arrays & model config
+├── 🧠 satya_lens_core.py     # RAG pipeline, DDG retriever & Mistral engine
+├── 🖼️ satyalens_logo.png     # Official SatyaLens logo emblem
+├── 📋 requirements.txt       # Project dependencies
+├── 🔒 .env.example           # Environment template
+└── 📖 README.md              # Project documentation
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are warmly welcomed! If you wish to suggest additional government domains or IFCN-certified fact checkers:
+
+1. Fork the Repository
+2. Create a Feature Branch (`git checkout -b feature/AddTrustedDomain`)
+3. Ensure proposed domains belong **strictly** to official government entities or IFCN-signatories.
+4. Commit your changes (`git commit -m "feat: Add verified domain"`)
+5. Push to Branch (`git push origin feature/AddTrustedDomain`)
+6. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — feel free to modify, distribute, and integrate.
+
+---
+
+<div align="center">
+
+  **Built with ❤️ for Truth & Unbiased Fact Verification**
+  <br />
+  <sub>SatyaLens v1.0.0 • Powered by Mistral AI & DuckDuckGo Search</sub>
+
+</div>
